@@ -2,8 +2,127 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../config/site.php';
+@source '../../app/Enums/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-navy-50: #f1f5fc;
+    --color-navy-100: #e1e9f8;
+    --color-navy-200: #c4d3ef;
+    --color-navy-300: #97b0df;
+    --color-navy-400: #6487c9;
+    --color-navy-500: #3f65b2;
+    --color-navy-600: #2d4f97;
+    --color-navy-700: #20407f;
+    --color-navy-800: #182f63;
+    --color-navy-900: #13254f;
+    --color-navy-950: #0a1530;
+
+    --color-gold-50: #fdf8ec;
+    --color-gold-100: #faefcf;
+    --color-gold-200: #f6dd9d;
+    --color-gold-300: #f0c35c;
+    --color-gold-400: #e9b04a;
+    --color-gold-500: #d99a2b;
+    --color-gold-600: #bf7a1f;
+    --color-gold-700: #9e5b1c;
+
+    --color-cream: #faf7f0;
+
+    --animate-float: float 7s ease-in-out infinite;
+    --animate-float-slow: float 10s ease-in-out infinite;
+    --animate-marquee: marquee 38s linear infinite;
+    --animate-blob: blob 18s ease-in-out infinite;
+    --animate-shine: shine 3.5s ease-in-out infinite;
+    --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(.2, .6, .4, 1) infinite;
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-14px); }
+    }
+    @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+    @keyframes blob {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(40px, -30px) scale(1.08); }
+        66% { transform: translate(-30px, 25px) scale(.95); }
+    }
+    @keyframes shine {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+    @keyframes pulse-ring {
+        0% { transform: scale(1); opacity: .55; }
+        100% { transform: scale(1.7); opacity: 0; }
+    }
+}
+
+@layer base {
+    html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+    body { @apply bg-white font-sans text-slate-700 antialiased; }
+    h1, h2, h3, h4 { @apply font-display text-navy-900; }
+    ::selection { @apply bg-gold-200 text-navy-950; }
+    :focus-visible { @apply outline-2 outline-offset-2 outline-gold-500; }
+    [x-cloak] { display: none !important; }
+}
+
+@layer components {
+    .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+
+    .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 will-change-transform focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-base; }
+    .btn-gold { @apply bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500 text-navy-950 shadow-lg shadow-gold-500/25 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gold-500/35; }
+    .btn-navy { @apply bg-navy-900 text-white shadow-lg shadow-navy-900/20 hover:-translate-y-0.5 hover:bg-navy-800; }
+    .btn-outline { @apply border border-navy-200 bg-white text-navy-900 hover:-translate-y-0.5 hover:border-navy-900; }
+    .btn-ghost-light { @apply border border-white/25 bg-white/5 text-white backdrop-blur hover:-translate-y-0.5 hover:bg-white/15; }
+
+    .eyebrow { @apply inline-flex items-center gap-2 rounded-full bg-gold-50 px-3.5 py-1.5 text-xs font-semibold tracking-[.14em] text-gold-700 uppercase ring-1 ring-gold-200; }
+    .eyebrow-dark { @apply inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-[.14em] text-gold-300 uppercase ring-1 ring-white/15; }
+
+    .card { @apply rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy-900/5 sm:p-8; }
+
+    .field-label { @apply mb-1.5 block text-sm font-medium text-navy-900; }
+    .field { @apply block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-navy-950 placeholder:text-slate-400 transition focus:border-navy-600 focus:ring-4 focus:ring-navy-100 focus:outline-none; }
+    .field-error { @apply mt-1.5 text-sm text-rose-600; }
+
+    .text-gradient-gold { @apply bg-gradient-to-r from-gold-300 via-gold-200 to-gold-400 bg-clip-text text-transparent; background-size: 200% auto; }
+
+    .prose-legal h2 { @apply mt-10 mb-3 text-xl font-semibold; }
+    .prose-legal p, .prose-legal li { @apply leading-relaxed text-slate-600; }
+    .prose-legal ul { @apply mt-2 list-disc space-y-1.5 pl-5; }
+    .prose-legal p + p { @apply mt-3; }
+}
+
+/* Scroll reveal: elements start hidden only when JS is available. */
+.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal='left'] { transform: translateX(-36px); }
+.js [data-reveal='right'] { transform: translateX(36px); }
+.js [data-reveal='zoom'] { transform: scale(.94); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+.site-header.is-scrolled { @apply bg-white/90 shadow-lg shadow-navy-900/5 backdrop-blur-xl; }
+.site-header.is-scrolled .nav-link { @apply text-navy-900; }
+.site-header.is-scrolled .brand-name { @apply text-navy-900; }
+
+.grid-pattern {
+    background-image: linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+details[open] .faq-icon { transform: rotate(45deg); }
+details summary::-webkit-details-marker { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    .js [data-reveal] { opacity: 1; transform: none; }
 }
