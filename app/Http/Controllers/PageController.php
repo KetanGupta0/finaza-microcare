@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class PageController extends Controller
 {
     public function home(): View
     {
-        if (config('site.coming_soon') && Carbon::parse(config('site.launch_at'))->isFuture()) {
-            return app(ComingSoonController::class)();
-        }
-
         return view('pages.home');
     }
 

@@ -4,13 +4,6 @@ return [
     'name' => env('SITE_NAME', 'Finaza Microcare'),
     'tagline' => 'Grow · Save · Prosper',
 
-    /*
-     * When true, "/" shows the Diwali countdown page until "launch_at" passes.
-     */
-    'coming_soon' => (bool) env('SITE_COMING_SOON', false),
-
-    // Launch moment shown on the countdown (Diwali 2026). ISO-8601 with offset.
-    'launch_at' => env('SITE_LAUNCH_AT', '2026-11-08T00:00:00+05:30'),
     'timezone' => env('SITE_TIMEZONE', 'Asia/Kolkata'),
 
     // 10-digit Indian mobile numbers, without country code.

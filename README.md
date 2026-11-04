@@ -13,7 +13,6 @@ Laravel 13 website for [finazamicrocare.com](https://finazamicrocare.com) (Finaz
 | Site content: phone, address, company details, services | `config/site.php` (phone/email/hours can be set in `.env`) |
 | Logo, favicon, social image | `public/images/brand/` |
 | Photos (Unsplash License, free for commercial use) | `public/images/photos/` |
-| Diwali countdown page | `ComingSoonController`, shown on `/` only when `SITE_COMING_SOON=true` and before `SITE_LAUNCH_AT` |
 
 Styles use Tailwind CSS 4 (`resources/css/app.css`), icons come from the Lucide CDN. The compiled assets in `public/build` are committed, so the server does not need Node.js.
 
