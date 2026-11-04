@@ -1,16 +1,21 @@
-# Finaza Microcare — Coming Soon
+# Finaza Microcare Website
 
-Laravel 13 app serving the Diwali "Coming Soon" page for [finazamicrocare.com](https://finazamicrocare.com).
+Laravel 13 website for [finazamicrocare.com](https://finazamicrocare.com) (Finaza Micro Care Federation of India, CIN U65100BR2022NPL057169), with an admin panel for website enquiries.
 
 ## What's inside
 
-| File | Purpose |
+| Area | Files |
 |---|---|
-| `routes/web.php` | `/` → `ComingSoonController` |
-| `app/Http/Controllers/ComingSoonController.php` | Prepares launch date, phone and map link for the view |
-| `config/site.php` | Site name, launch date, phone, address (overridable via `.env`) |
-| `resources/views/coming-soon.blade.php` | Page markup |
-| `public/css/coming-soon.css`, `public/js/coming-soon.js` | Styles, countdown, fireworks animation (no build step needed) |
+| Public pages (Home, About, Services, Contact, Privacy, Terms) | `routes/web.php`, `app/Http/Controllers/PageController.php`, `resources/views/pages/*` |
+| Shared layout, SEO meta, JSON-LD, header/footer | `resources/views/components/layouts/site.blade.php` |
+| Enquiry form → `leads` table | `resources/views/components/enquiry-form.blade.php`, `app/Http/Controllers/LeadController.php`, `app/Http/Requests/StoreLeadRequest.php` |
+| Admin panel (`/admin`) — leads table, filters, status/notes, CSV export | `app/Http/Controllers/Admin/*`, `resources/views/admin/*` |
+| Site content: phone, address, company details, services | `config/site.php` (phone/email/hours can be set in `.env`) |
+| Logo, favicon, social image | `public/images/brand/` |
+| Photos (Unsplash License, free for commercial use) | `public/images/photos/` |
+| Diwali countdown page | `ComingSoonController`, shown on `/` only when `SITE_COMING_SOON=true` and before `SITE_LAUNCH_AT` |
+
+Styles use Tailwind CSS 4 (`resources/css/app.css`), icons come from the Lucide CDN. The compiled assets in `public/build` are committed, so the server does not need Node.js.
 
 ## Local setup
 
@@ -18,30 +23,28 @@ Laravel 13 app serving the Diwali "Coming Soon" page for [finazamicrocare.com](h
 composer install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate        # creates the default SQLite tables
+php artisan migrate
+npm install && npm run build   # only needed after changing CSS/JS/Blade classes
 php artisan serve
 ```
 
-Open http://127.0.0.1:8000.
+## Create an admin login
 
-## Configuration (`.env`)
-
-```dotenv
-SITE_NAME="Finaza Microcare"
-SITE_LAUNCH_AT=2026-11-08T00:00:00+05:30   # countdown target (Diwali 2026)
-SITE_TIMEZONE=Asia/Kolkata
-SITE_PHONE=8009877918
-SITE_COUNTRY_CODE=+91
+```bash
+php artisan app:create-admin-user owner@example.com --name="Owner"
 ```
 
-When the countdown reaches zero the page switches to a "We're Live!" message automatically.
+You will be asked for a password. Run the same command again to reset a password. Then open `/admin`.
 
 ## Deploying (shared hosting / cPanel)
 
 1. Upload the project, run `composer install --no-dev --optimize-autoloader`.
 2. Point the domain's document root to the `public/` folder.
-3. Set `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://finazamicrocare.com` in `.env`.
-4. `php artisan config:cache && php artisan route:cache && php artisan view:cache`
+3. Set `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://finazamicrocare.com` and database settings in `.env`.
+4. `php artisan migrate --force`
+5. `php artisan app:create-admin-user you@example.com`
+6. `php artisan config:cache && php artisan route:cache && php artisan view:cache`
+7. Submit `https://finazamicrocare.com/sitemap.xml` in Google Search Console and create a Google Business Profile for the office.
 
 ## Tests
 
